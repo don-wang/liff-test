@@ -33,8 +33,6 @@ import { goto } from '$app/navigation';
 	});
 
 	const lineShare = () => {
-		console.log($page.url)
-		goto(`${$page.url.origin}/referral?referralId=123TEST`)
 		if (liff.isApiAvailable("shareTargetPicker")) {
 			liff
     .shareTargetPicker(
