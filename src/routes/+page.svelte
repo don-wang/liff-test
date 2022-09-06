@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import QrCode from '@components/QrCode.svelte';
 	import { env } from '@lib/env';
+	let log:string
 	const liffId = env.LIFF_ID;
 	import type { Liff } from '@liff/liff-types';
 	let liff: Liff; // LIFF module
@@ -36,7 +37,7 @@
         },
 				{
           type: "text",
-          text: "https://line.me/R/ti/p/@6Xza53N",
+          text: "https://lin.ee/6Xza53N",
         },
       ],
       {
@@ -47,14 +48,15 @@
       if (res) {
         // succeeded in sending a message through TargetPicker
         console.log(`[${res.status}] Message sent!`);
+				log = JSON.stringify(res)
       } else {
-
-        console.log("TargetPicker was closed!");
+				log ="TargetPicker failed"
       }
     })
     .catch(function (error) {
       // something went wrong before sending a message
       console.log("something wrong happen");
+			log = error
     });
 		}
 	}
@@ -80,13 +82,6 @@
 						height="36"
 					/>
 				</a>
-				<a href="https://line.me/R/nv/recommendOA/@6Xza53N">
-					<img
-						src="https://developers.line.biz/media/line-social-plugins/ja/wide-default.png"
-						alt="LINEで送る TEST"
-						height="36"
-					/>
-				</a>
 			</div>
 		</div>
 		<div class="liff-info">
@@ -98,6 +93,8 @@
 				<dd>{liff.isInClient()}</dd>
 				<dt>ID Token:</dt>
 				<dd>{liff.getIDToken()}</dd>
+				<dt>Debug Log:</dt>
+				<dd>{log}</dd>
 			</dl>
 		</div>
 	{:else}
