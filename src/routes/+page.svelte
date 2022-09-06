@@ -3,11 +3,16 @@
 	import { onMount } from 'svelte';
 	import QrCode from '@components/QrCode.svelte';
 	import { env } from '@lib/env';
+	import { page } from '$app/stores';
+
 	let log:string
+	
 	const liffId = env.LIFF_ID;
 	import type { Liff } from '@liff/liff-types';
+import { goto } from '$app/navigation';
 	let liff: Liff; // LIFF module
 	let liffStatus = false;
+	let liffError = ''
 	
 	onMount(async () => {
 		const l = await import('@line/liff');
@@ -21,12 +26,15 @@
 			})
 			.catch((error: Error) => {
 				liffStatus = false;
+				liffError = 'LIFF init failed.'
 				console.log('LIFF init failed.');
 				return Promise.reject(error);
 			});
 	});
 
 	const lineShare = () => {
+		console.log($page.url)
+		goto(`${$page.url.origin}/referral?referralId=123TEST`)
 		if (liff.isApiAvailable("shareTargetPicker")) {
 			liff
     .shareTargetPicker(
@@ -37,7 +45,7 @@
         },
 				{
           type: "text",
-          text: "https://lin.ee/6Xza53N",
+          text: `${$page.url.origin}/referral?referralId=123TEST`,
         },
       ],
       {
@@ -98,7 +106,11 @@
 			</dl>
 		</div>
 	{:else}
-		<p>LIFF起動失敗しました</p>
+		{#if liffError}
+			<p>{liffError}</p>
+		{:else}
+			<p>Loading</p>
+		{/if}
 	{/if}
 </div>
 
