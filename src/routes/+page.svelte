@@ -5,15 +5,15 @@
 	import { env } from '@lib/env';
 	import { page } from '$app/stores';
 
-	let log:string
-	
+	let log: string;
+
 	const liffId = env.LIFF_ID;
 	import type { Liff } from '@liff/liff-types';
-import { goto } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	let liff: Liff; // LIFF module
 	let liffStatus = false;
-	let liffError = ''
-	
+	let liffError = '';
+
 	onMount(async () => {
 		const l = await import('@line/liff');
 
@@ -26,46 +26,47 @@ import { goto } from '$app/navigation';
 			})
 			.catch((error: Error) => {
 				liffStatus = false;
-				liffError = 'LIFF init failed.'
+				liffError = 'LIFF init failed.';
 				console.log('LIFF init failed.');
 				return Promise.reject(error);
 			});
 	});
 
 	const lineShare = () => {
-		if (liff.isApiAvailable("shareTargetPicker")) {
+		if (liff.isApiAvailable('shareTargetPicker')) {
 			liff
-    .shareTargetPicker(
-      [
-        {
-          type: "text",
-          text: "いいもの招待するよ",
-        },
-				{
-          type: "text",
-          text: `https://liff.line.me/1657077671-2VxpX4Md/referral?referralId=123TEST`,
-        },
-      ],
-      {
-        isMultiple: true,
-      }
-    )
-    .then(function (res) {
-      if (res) {
-        // succeeded in sending a message through TargetPicker
-        console.log(`[${res.status}] Message sent!`);
-				log = JSON.stringify(res)
-      } else {
-				log ="TargetPicker failed"
-      }
-    })
-    .catch(function (error) {
-      // something went wrong before sending a message
-      console.log("something wrong happen");
-			log = error
-    });
+				.shareTargetPicker(
+					[
+						{
+							type: 'text',
+							text: 'いいもの招待するよ',
+						},
+						{
+							type: 'text',
+							text: `https://liff.line.me/1657077671-2VxpX4Md/referral?referralId=123TEST`,
+						},
+					],
+					{
+						isMultiple: true,
+					}
+				)
+				.then(function (res) {
+					if (res) {
+						// succeeded in sending a message through TargetPicker
+						console.log(`[${res.status}] Message sent!`);
+						log = JSON.stringify(res);
+						liff.closeWindow();
+					} else {
+						log = 'TargetPicker failed';
+					}
+				})
+				.catch(function (error) {
+					// something went wrong before sending a message
+					console.log('something wrong happen');
+					log = error;
+				});
 		}
-	}
+	};
 </script>
 
 <svelte:head>
@@ -81,7 +82,7 @@ import { goto } from '$app/navigation';
 			<QrCode url={`https://liff.line.me/1657077671-2VxpX4Md/referral?referralId=123TEST`} />
 
 			<div class="line-button">
-				<a on:click|preventDefault={lineShare}>
+				<a on:click|preventDefault={lineShare} href="./">
 					<img
 						src="https://developers.line.biz/media/line-social-plugins/ja/wide-default.png"
 						alt="LINEで送る"
@@ -103,12 +104,10 @@ import { goto } from '$app/navigation';
 				<dd>{log}</dd>
 			</dl>
 		</div>
+	{:else if liffError}
+		<p>{liffError}</p>
 	{:else}
-		{#if liffError}
-			<p>{liffError}</p>
-		{:else}
-			<p>Loading</p>
-		{/if}
+		<p>Loading</p>
 	{/if}
 </div>
 
