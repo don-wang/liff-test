@@ -45,7 +45,7 @@ import { goto } from '$app/navigation';
         },
 				{
           type: "text",
-          text: `${$page.url.origin}/referral?referralId=123TEST`,
+          text: `https://liff.line.me/1657077671-2VxpX4Md/referral?referralId=123TEST`,
         },
       ],
       {
@@ -83,7 +83,7 @@ import { goto } from '$app/navigation';
 			<QrCode url={`https://liff.line.me/1657077671-2VxpX4Md/referral?referralId=123TEST`} />
 
 			<div class="line-button">
-				<a on:click|preventDefault={lineShare}	href="https://line.me/R/nv/recommendOA/@6Xza53N">
+				<a on:click|preventDefault={lineShare}>
 					<img
 						src="https://developers.line.biz/media/line-social-plugins/ja/wide-default.png"
 						alt="LINEで送る"
