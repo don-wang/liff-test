@@ -3,13 +3,11 @@
 	import { onMount } from 'svelte';
 	import QrCode from '@components/QrCode.svelte';
 	import { env } from '@lib/env';
-	import { page } from '$app/stores';
 
 	let log: string;
 
 	const liffId = env.LIFF_ID;
 	import type { Liff } from '@liff/liff-types';
-	import { goto } from '$app/navigation';
 	let liff: Liff; // LIFF module
 	let liffStatus = false;
 	let liffError = '';
@@ -32,24 +30,44 @@
 			});
 	});
 
-	const lineShare = () => {
+	const lineShare = (type: string) => {
+		let messages: { type: 'text'; text: string }[];
 		if (liff.isApiAvailable('shareTargetPicker')) {
-			liff
-				.shareTargetPicker(
-					[
-						{
-							type: 'text',
-							text: 'いいもの招待するよ',
-						},
-						{
-							type: 'text',
-							text: `https://liff.line.me/1657077671-2VxpX4Md/referral?referralId=123TEST`,
-						},
-					],
+			if (type === 'auto') {
+				messages = [
 					{
-						isMultiple: true,
-					}
-				)
+						type: 'text',
+						text: 'いいもの招待するよ',
+					},
+					{
+						type: 'text',
+						text: `https://liff.line.me/1657077671-2VxpX4Md/referral?referralId=123TEST`,
+					},
+				];
+			} else {
+				messages = [
+					{
+						type: 'text',
+						text: '友だち追加URL:',
+					},
+					{
+						type: 'text',
+						text: `https://line.me/R/ti/p/@061ycxil`,
+					},
+					{
+						type: 'text',
+						text: '紹介コード入力URL:',
+					},
+					{
+						type: 'text',
+						text: `https://liff.line.me/1657077671-2VxpX4Md/code-input?referralCode=123TEST`,
+					},
+				];
+			}
+			liff
+				.shareTargetPicker([...messages], {
+					isMultiple: true,
+				})
 				.then(function (res) {
 					if (res) {
 						// succeeded in sending a message through TargetPicker
@@ -78,11 +96,9 @@
 	{#if liffStatus}
 		<h2>LIFF起動できました</h2>
 		<div class="referral">
-			<h3>QR Code</h3>
-			<QrCode url={`https://liff.line.me/1657077671-2VxpX4Md/referral?referralId=123TEST`} />
-
+			<h3>紹介コード入力</h3>
 			<div class="line-button">
-				<a on:click|preventDefault={lineShare} href="./">
+				<a on:click|preventDefault={() => lineShare('code')} href="./">
 					<img
 						src="https://developers.line.biz/media/line-social-plugins/ja/wide-default.png"
 						alt="LINEで送る"
@@ -90,6 +106,18 @@
 					/>
 				</a>
 			</div>
+			<h3>友だち追加検知</h3>
+			<div class="line-button">
+				<a on:click|preventDefault={() => lineShare('auto')} href="./">
+					<img
+						src="https://developers.line.biz/media/line-social-plugins/ja/wide-default.png"
+						alt="LINEで送る"
+						height="36"
+					/>
+				</a>
+			</div>
+			<h3>QR Code Sample</h3>
+			<QrCode url={`https://liff.line.me/1657077671-2VxpX4Md/referral?referralId=123TEST`} />
 		</div>
 		<div class="liff-info">
 			<h3>LIFF Info</h3>
