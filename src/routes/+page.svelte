@@ -32,7 +32,11 @@
       [
         {
           type: "text",
-          text: "Hello, World!",
+          text: "いいもの招待するよ",
+        },
+				{
+          type: "text",
+          text: "https://line.me/R/ti/p/@6Xza53N",
         },
       ],
       {
@@ -52,8 +56,6 @@
       // something went wrong before sending a message
       console.log("something wrong happen");
     });
-		} else {
-			alert('no')
 		}
 	}
 </script>
@@ -75,6 +77,13 @@
 					<img
 						src="https://developers.line.biz/media/line-social-plugins/ja/wide-default.png"
 						alt="LINEで送る"
+						height="36"
+					/>
+				</a>
+				<a href="https://line.me/R/nv/recommendOA/@6Xza53N">
+					<img
+						src="https://developers.line.biz/media/line-social-plugins/ja/wide-default.png"
+						alt="LINEで送る TEST"
 						height="36"
 					/>
 				</a>
