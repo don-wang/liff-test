@@ -80,7 +80,7 @@ import { goto } from '$app/navigation';
 		<h2>LIFF起動できました</h2>
 		<div class="referral">
 			<h3>QR Code</h3>
-			<QrCode url="hello" />
+			<QrCode url={`${$page.url.origin}/referral?referralId=123TEST`} />
 
 			<div class="line-button">
 				<a on:click|preventDefault={lineShare}	href="https://line.me/R/nv/recommendOA/@6Xza53N">
