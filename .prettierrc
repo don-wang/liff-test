@@ -1,0 +1,15 @@
+{
+	"plugins": ["prettier-plugin-svelte"],
+	"svelteSortOrder": "options-scripts-markup-styles",
+	"svelteStrictMode": false,
+	"svelteBracketNewLine": true,
+	"svelteIndentScriptAndStyle": true,
+	"trailingComma": "es5",
+	"useTabs": true,
+	"singleQuote": true,
+	"printWidth": 100,
+	"pluginSearchDirs": ["."],
+	"endOfLine": "lf",
+	"arrowParens": "avoid",
+	"overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }]
+}
