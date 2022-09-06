@@ -7,6 +7,7 @@
 	import type { Liff } from '@liff/liff-types';
 	let liff: Liff; // LIFF module
 	let liffStatus = false;
+	
 	onMount(async () => {
 		const l = await import('@line/liff');
 
@@ -23,14 +24,42 @@
 				return Promise.reject(error);
 			});
 	});
+
+	const lineShare = () => {
+		if (liff.isApiAvailable("shareTargetPicker")) {
+			liff
+    .shareTargetPicker(
+      [
+        {
+          type: "text",
+          text: "Hello, World!",
+        },
+      ],
+      {
+        isMultiple: true,
+      }
+    )
+    .then(function (res) {
+      if (res) {
+        // succeeded in sending a message through TargetPicker
+        console.log(`[${res.status}] Message sent!`);
+      } else {
+
+        console.log("TargetPicker was closed!");
+      }
+    })
+    .catch(function (error) {
+      // something went wrong before sending a message
+      console.log("something wrong happen");
+    });
+		} else {
+			alert('no')
+		}
+	}
 </script>
 
 <svelte:head>
 	<title>LIFF TEST</title>
-	<script
-		src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js"
-		async="async"
-		defer="defer"></script>
 </svelte:head>
 
 <div class="content">
@@ -42,26 +71,13 @@
 			<QrCode url="hello" />
 
 			<div class="line-button">
-				<a href="https://line.me/R/nv/recommendOA/@6Xza53N"
-					><img
+				<a on:click|preventDefault={lineShare}	href="https://line.me/R/nv/recommendOA/@6Xza53N">
+					<img
 						src="https://developers.line.biz/media/line-social-plugins/ja/wide-default.png"
 						alt="LINEで送る"
 						height="36"
 					/>
 				</a>
-
-				<div
-					class="line-it-button"
-					data-lang="ja"
-					data-type="share-a"
-					data-env="REAL"
-					data-url="https://line.me/R/nv/recommendOA/%406Xza53N"
-					data-color="default"
-					data-size="small"
-					data-count="false"
-					data-ver="3"
-					style="display: none;"
-				/>
 			</div>
 		</div>
 		<div class="liff-info">
