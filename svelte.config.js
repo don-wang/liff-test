@@ -9,7 +9,7 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-			fallback: 'index.html',
+			fallback: '404.html',
 		}),
 		prerender: {
 			// This can be false if you're using a fallback (i.e. SPA mode)
